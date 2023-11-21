@@ -5,7 +5,7 @@ import utils
 import config as cfg
 from itertools import product
 from metric_builder import Metric, CalculateMetric
-from stattests import TTestFromStats, calculate_statistics, calculate_linearization
+from stattests import TTestFromStats, calculate_statistics, calculate_linearization, PropTestFromStat, MannWhitneyFromStats
 
 
 class Report:
@@ -15,12 +15,17 @@ class Report:
 
 class BuildMetricReport:
     def __call__(self, calculated_metric, metric_items) -> Report:
-        ttest = TTestFromStats()
+        # ttest = TTestFromStats()
+        test = {
+            "t_test": TTestFromStats(),
+            "mann_whitney": MannWhitneyFromStats(),
+            "prop_test": PropTestFromStat()
+        }
         cfg.logger.info(f"{metric_items.name}")
 
         df_ = calculate_linearization(calculated_metric)
         stats = calculate_statistics(df_, metric_items.type)
-        criteria_res = ttest(stats)
+        criteria_res = test[metric_items.estimator](stats)
 
         report_items = pd.DataFrame({
             "metric_name": metric_items.name,

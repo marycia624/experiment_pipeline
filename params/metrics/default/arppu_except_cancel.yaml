@@ -1,4 +1,4 @@
-name: Average Revenue per Paying User Without Cancelation
+name: Average Revenue per Paying User Without Cancellation
 type: ratio
 estimator: mann_whitney
 level: user_pseudo_id
@@ -8,7 +8,7 @@ numerator:
 numerator_conditions:
   - condition_field: pg_status
     comparison_sign: not_equal
-    comparison_value: CANCELED
+    comparison_value: CANCELLED
 denominator:
   aggregation_field: user_pseudo_id
   aggregation_function: count_distinct
